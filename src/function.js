@@ -58,34 +58,60 @@ export function trouverApprenantParId(apprenants, id) {
 }
 
 //progression = (somme de tous les exercicesTermines / somme de tous les totalExercices) × 100
-export function calculerProgression(apprenant){
+export function calculerProgression(apprenant) {
   let totalTermines = 0;
   let totalProposes = 0;
 
   for (let i = 0; i < apprenant.resultats.length; i++) {
     totalTermines = totalTermines + apprenant.resultats[i].exercicesTermines;
     totalProposes = totalProposes + apprenant.resultats[i].totalExercices;
-}
-let progression = (totalTermines/totalProposes)*100
-return progression
-}
-export function construireFicheApprenant(apprenant, progression){
-  if(apprenant == undefined)
-  {
-    return "Erreur : aucun apprenant trouvé avec cet identifiant."
   }
-  else
-    console.log("--- Fiche apprenant ---")
-  console.log(`Nom : ${apprenant.nomComplet}`)
-  console.log(`Ville : ${apprenant.ville}`)
-  console.log(`Progression : ${progression}`)
-  console.log(`Journées renseignées : ${resultats.length} `)
-
+  let progression = (totalTermines / totalProposes) * 100;
+  return progression.toFixed(2);
 }
 
-//Nom : Sara Dev
-//Ville : Nador
-//Progression : 80 %
-//Journées renseignées : 2 (jours 1, 2)
-//Challenges terminés : 1
-//Jours manquants : 3, 4, 5, 6, 7
+// this one counts how many challenges are done
+export function compterChallenges(apprenant) {
+  let challengesTermines = 0;
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+    if (apprenant.resultats[i].challengeTermine === true) {
+      challengesTermines = challengesTermines + 1;
+    }
+  }
+  return challengesTermines;
+}
+
+// this one checks how many days the apprenant missed
+export function trouverJoursManquants(apprenant) {
+  let joursManquants = [];
+  for (let i = 1; i <= 7; i++) {
+    let trouve = false;
+    for (let j = 0; j < apprenant.resultats.length; j++) {
+      if (apprenant.resultats[j].jour === i) {
+        trouve = true;
+      }
+    }
+    if (trouve === false) {
+      joursManquants.push(i);
+    }
+  }
+  return joursManquants;
+}
+
+// this one displays the full apprenant fiche: nomComplet, ville, progression....
+export function construireFicheApprenant(apprenant, progression) {
+  if (apprenant == undefined) {
+    return "Erreur : aucun apprenant trouvé avec cet identifiant.";
+  } else 
+  console.log("------------ Fiche apprenant ------------");
+  console.log(`Identifiant          : ${apprenant.id}`);
+  console.log(`Nom Complet          : ${apprenant.nomComplet}`);
+  console.log(`Ville                : ${apprenant.ville}`);
+  console.log(`Progression          : ${progression}`);
+  console.log(`Journées renseignées : ${apprenant.resultats.length} `);
+  console.log(`Challenges terminés  : ${compterChallenges(apprenant)}`);
+  console.log(`Jours manquants      : ${trouverJoursManquants(apprenant)}`);
+  console.log("-----------------------------------------");
+}
+
+

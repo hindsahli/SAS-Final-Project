@@ -5,7 +5,7 @@ import {
   ajouterApprenant,
   trouverApprenantParId,
   calculerProgression,
-  construireFicheApprenant
+  construireFicheApprenant,
 } from "./function.js";
 import promptSyncModule from "prompt-sync";
 
@@ -29,10 +29,14 @@ while (estVrai) {
       console.log(message);
       break;
     case 4:
-      let ID = Number(prompt("Votre choix : "));
-      let apprenant = trouverApprenantParId(apprenants, ID)
-      let progression = calculerProgression(apprenant)
-      construireFicheApprenant(apprenant, progression)
+      let ID = Number(prompt("Identifiant de l'apprenant : "));
+      let apprenant = trouverApprenantParId(apprenants, ID);
+      if (apprenant === undefined) {
+        console.log("Erreur : aucun apprenant trouvé avec cet identifiant.");
+      } else {
+        let progression = calculerProgression(apprenant);
+        construireFicheApprenant(apprenant, progression);
+      }
       break;
     case 5:
       break;
