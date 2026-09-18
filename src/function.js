@@ -46,3 +46,46 @@ export function ajouterApprenant(apprenants, nomComplet, ville) {
   });
   return "Apprenant ajouté avec l'identifiant " + apprenants.length + ".";
 }
+
+//searches for an apprenant by id, one by one (linear search)
+export function trouverApprenantParId(apprenants, id) {
+  for (let i = 0; i < apprenants.length; i++) {
+    if (apprenants[i].id === id) {
+      return apprenants[i];
+    }
+  }
+  return undefined;
+}
+
+//progression = (somme de tous les exercicesTermines / somme de tous les totalExercices) × 100
+export function calculerProgression(apprenant){
+  let totalTermines = 0;
+  let totalProposes = 0;
+
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+    totalTermines = totalTermines + apprenant.resultats[i].exercicesTermines;
+    totalProposes = totalProposes + apprenant.resultats[i].totalExercices;
+}
+let progression = (totalTermines/totalProposes)*100
+return progression
+}
+export function construireFicheApprenant(apprenant, progression){
+  if(apprenant == undefined)
+  {
+    return "Erreur : aucun apprenant trouvé avec cet identifiant."
+  }
+  else
+    console.log("--- Fiche apprenant ---")
+  console.log(`Nom : ${apprenant.nomComplet}`)
+  console.log(`Ville : ${apprenant.ville}`)
+  console.log(`Progression : ${progression}`)
+  console.log(`Journées renseignées : ${resultats.length} `)
+
+}
+
+//Nom : Sara Dev
+//Ville : Nador
+//Progression : 80 %
+//Journées renseignées : 2 (jours 1, 2)
+//Challenges terminés : 1
+//Jours manquants : 3, 4, 5, 6, 7

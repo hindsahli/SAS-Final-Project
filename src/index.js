@@ -3,6 +3,9 @@ import {
   afficherMenu,
   afficherListeApprenants,
   ajouterApprenant,
+  trouverApprenantParId,
+  calculerProgression,
+  construireFicheApprenant
 } from "./function.js";
 import promptSyncModule from "prompt-sync";
 
@@ -26,6 +29,10 @@ while (estVrai) {
       console.log(message);
       break;
     case 4:
+      let ID = Number(prompt("Votre choix : "));
+      let apprenant = trouverApprenantParId(apprenants, ID)
+      let progression = calculerProgression(apprenant)
+      construireFicheApprenant(apprenant, progression)
       break;
     case 5:
       break;
