@@ -15,7 +15,7 @@ export function afficherMenu() {
   console.log("3. Ajouter un apprenant");
   console.log("4. Consulter un apprenant par identifiant");
   console.log("5. Ajouter ou modifier le résultat d'une journée");
-  console.log("6. Rechercher un apprenant par nom");
+  console.log("6. Rechercher un apprenant par le nom complet");
   console.log("7. Filtrer les apprenants par niveau");
   console.log("8. Trier les apprenants par progression décroissante");
   console.log("9. Trier les apprenants par ordre alphabétique");
@@ -102,8 +102,7 @@ export function trouverJoursManquants(apprenant) {
 export function construireFicheApprenant(apprenant, progression) {
   if (apprenant == undefined) {
     return "Erreur : aucun apprenant trouvé avec cet identifiant.";
-  } else 
-  console.log("------------ Fiche apprenant ------------");
+  } else console.log("------------ Fiche apprenant ------------");
   console.log(`Identifiant          : ${apprenant.id}`);
   console.log(`Nom Complet          : ${apprenant.nomComplet}`);
   console.log(`Ville                : ${apprenant.ville}`);
@@ -114,4 +113,34 @@ export function construireFicheApprenant(apprenant, progression) {
   console.log("-----------------------------------------");
 }
 
+export function trouverApprenantParNom(apprenants, nom) {
+  for (let i = 0; i < apprenants.length; i++) {
+    if (apprenants[i].nomComplet.includes(nom)) return apprenants[i];
+    break;
+  }
+  return undefined;
+}
 
+// takes the progression and returns the level of the apprenant
+export function determinerNiveau(progression) {
+  if (progression >= 80) {
+    return "Solide";
+  } else if (progression >= 50) {
+    return "En progression";
+  } else {
+    return "À renforcer";
+  }
+}
+
+//this one takes the level wanted and returns an array of the apprenant with that level
+export function filtrerParNiveau(apprenants, niveau) {
+  let resultats = [];
+  for (let i = 0; i < apprenants.length; i++) {
+    let progression = calculerProgression(apprenants[i]);
+    let niveauApprenant = determinerNiveau(progression);
+    if (niveauApprenant === niveau) {
+      resultats.push(apprenants[i]);
+    }
+  }
+  return resultats;
+}
