@@ -1,5 +1,6 @@
 import { apprenants } from "./data.js";
 import {
+  normaliserLeNom,
   afficherMenu,
   afficherListeApprenants,
   ajouterApprenant,
@@ -8,7 +9,10 @@ import {
   construireFicheApprenant,
   trouverApprenantParNom,
   filtrerParNiveau,
-  determinerNiveau
+  determinerNiveau,
+  trierParProgression,
+  trierParAlpha,
+  enregistrerResultat,
 } from "./function.js";
 import promptSyncModule from "prompt-sync";
 
@@ -21,6 +25,7 @@ while (estVrai) {
 
   switch (choix) {
     case 1:
+      console.log("Le tableau de bord n’est pas disponible.");
       break;
     case 2:
       afficherListeApprenants(apprenants);
@@ -42,9 +47,42 @@ while (estVrai) {
       }
       break;
     case 5:
+      let theapprenant = trouverApprenantParId(
+        apprenants,
+        Number(prompt("Identifiant de l'apprenant : ")),
+      );
+
+      if (theapprenant === undefined) {
+        console.log("Erreur : aucun apprenant trouvé.");
+        break;
+      }
+
+      console.log("Apprenant trouvé : " + theapprenant.nomComplet);
+
+      let resultat = {
+        jour: Number(prompt("Jour (1 à 7) : ")),
+        exercicesTermines: Number(prompt("Exercices terminés : ")),
+        totalExercices: Number(prompt("Total d'exercices proposés : ")),
+        challengeTermine: prompt("Challenge terminé (oui/non) : ") === "oui",
+      };
+
+      if (resultat.jour < 1 || resultat.jour > 7) {
+        console.log("Erreur : jour invalide.");
+      } else if (resultat.exercicesTermines > resultat.totalExercices) {
+        console.log("Erreur : exercices terminés > exercices proposés.");
+      } else {
+        console.log(enregistrerResultat(theapprenant, resultat));
+        console.log(
+          theapprenant.nomComplet +
+            " : progression " +
+            calculerProgression(theapprenant) +
+            " %.",
+        );
+      }
       break;
     case 6:
       let nom = prompt("Nom de l'apprenant complet : ");
+      nom = normaliserLeNom(nom);
       let theApprenant = trouverApprenantParNom(apprenants, nom);
       if (theApprenant === undefined) {
         console.log("Aucun apprenant trouvé.");
@@ -59,7 +97,7 @@ while (estVrai) {
       console.log("2. En progression");
       console.log("3. À renforcer");
       let choixNiveau = prompt("Choisissez un niveau : ");
-      
+
       if (choixNiveau === "1") choixNiveau = "Solide";
       else if (choixNiveau === "2") choixNiveau = "En progression";
       else if (choixNiveau === "3") choixNiveau = "À renforcer";
@@ -68,8 +106,12 @@ while (estVrai) {
       afficherListeApprenants(apprenantsFiltres);
       break;
     case 8:
+      let apprentsTries = trierParProgression(apprenants);
+      afficherListeApprenants(apprentsTries);
       break;
     case 9:
+      let apprentsTriesparAlpha = trierParAlpha(apprenants);
+      afficherListeApprenants(apprentsTriesparAlpha);
       break;
     case 0:
       console.log("Programme terminé. À bientôt !");

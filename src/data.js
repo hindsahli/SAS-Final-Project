@@ -40,33 +40,33 @@ export const apprenants = [
     resultats: [
       {
         jour: 1,
-        exercicesTermines: 20,
+        exercicesTermines: 2,
         totalExercices: 20,
         challengeTermine: true,
       },
       {
         jour: 2,
-        exercicesTermines: 18,
+        exercicesTermines: 3,
         totalExercices: 20,
         challengeTermine: true,
       },
       {
         jour: 3,
-        exercicesTermines: 19,
+        exercicesTermines: 1,
         totalExercices: 20,
         challengeTermine: true,
       },
       {
         jour: 4,
-        exercicesTermines: 20,
+        exercicesTermines: 2,
         totalExercices: 20,
-        challengeTermine: true,
+        challengeTermine: false,
       },
       {
         jour: 5,
-        exercicesTermines: 13,
+        exercicesTermines: 1,
         totalExercices: 14,
-        challengeTermine: true,
+        challengeTermine: false,
       },
       {
         jour: 6,

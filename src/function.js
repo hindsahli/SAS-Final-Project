@@ -81,23 +81,6 @@ export function compterChallenges(apprenant) {
   return challengesTermines;
 }
 
-// this one checks how many days the apprenant missed
-export function trouverJoursManquants(apprenant) {
-  let joursManquants = [];
-  for (let i = 1; i <= 7; i++) {
-    let trouve = false;
-    for (let j = 0; j < apprenant.resultats.length; j++) {
-      if (apprenant.resultats[j].jour === i) {
-        trouve = true;
-      }
-    }
-    if (trouve === false) {
-      joursManquants.push(i);
-    }
-  }
-  return joursManquants;
-}
-
 // this one displays the full apprenant fiche: nomComplet, ville, progression....
 export function construireFicheApprenant(apprenant, progression) {
   if (apprenant == undefined) {
@@ -109,7 +92,6 @@ export function construireFicheApprenant(apprenant, progression) {
   console.log(`Progression          : ${progression}`);
   console.log(`Journées renseignées : ${apprenant.resultats.length} `);
   console.log(`Challenges terminés  : ${compterChallenges(apprenant)}`);
-  console.log(`Jours manquants      : ${trouverJoursManquants(apprenant)}`);
   console.log("-----------------------------------------");
 }
 
@@ -143,4 +125,28 @@ export function filtrerParNiveau(apprenants, niveau) {
     }
   }
   return resultats;
+}
+
+// sorts les apprenants from highest progression to lowest
+export function trierParProgression(apprenants) {
+  apprenants.sort((a, b) => calculerProgression(b) - calculerProgression(a));
+  return apprenants;
+}
+
+// sorts les apprenants par l'ordre alphabetique
+export function trierParAlpha(apprenants) {
+  apprenants.sort((a, b) => a.nomComplet.localeCompare(b.nomComplet));
+  return apprenants;
+}
+
+// adds a new day result using .pusj (), or replaces it if that day already exists
+export function enregistrerResultat(apprenant, resultat) {
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+    if (apprenant.resultats[i].jour === resultat.jour) {
+      apprenant.resultats[i] = resultat;
+      return "Résultat mis à jour.";
+    }
+  }
+  apprenant.resultats.push(resultat);
+  return "Résultat enregistré.";
 }
