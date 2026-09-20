@@ -1,10 +1,5 @@
 import { apprenants } from "./data.js";
 
-// this function cleans a name , it removes extra spaces and makes it lowercased
-export function normaliserLeNom(nom) {
-  return String(nom).trim().toLowerCase();
-}
-
 //this function displays the Menu on the console
 export function afficherMenu() {
   console.log("=====================================================");
@@ -22,7 +17,9 @@ export function afficherMenu() {
   console.log("0. Quitter");
 }
 
-//this function is responsible on displaying the apprenants , one by one
+//----
+
+//2.this function is responsible on displaying the apprenants , one by one
 export function afficherListeApprenants(apprenants) {
   console.log("-------- Liste des apprenants --------");
   for (let i = 0; i < apprenants.length; i++) {
@@ -33,7 +30,14 @@ export function afficherListeApprenants(apprenants) {
   }
 }
 
-//this function is responsible on adding new apprenants to the list, with an auto-generated id
+//-----
+
+// 3.this function cleans a name , it removes extra spaces and makes it lowercased
+export function normaliserLeNom(nom) {
+  return String(nom).trim().toLowerCase();
+}
+
+//3.this function is responsible on adding new apprenants to the list, with an auto-generated id
 
 export function ajouterApprenant(apprenants, nomComplet, ville) {
   nomComplet = normaliserLeNom(nomComplet);
@@ -47,7 +51,9 @@ export function ajouterApprenant(apprenants, nomComplet, ville) {
   return "Apprenant ajouté avec l'identifiant " + apprenants.length + ".";
 }
 
-//searches for an apprenant by id, one by one (linear search)
+//-----
+
+//4.searches for an apprenant by id, one by one (recherche linéaire)
 export function trouverApprenantParId(apprenants, id) {
   for (let i = 0; i < apprenants.length; i++) {
     if (apprenants[i].id === id) {
@@ -57,7 +63,7 @@ export function trouverApprenantParId(apprenants, id) {
   return undefined;
 }
 
-//progression = (somme de tous les exercicesTermines / somme de tous les totalExercices) × 100
+//4.progression = (somme de tous les exercicesTermines / somme de tous les totalExercices) × 100
 export function calculerProgression(apprenant) {
   let totalTermines = 0;
   let totalProposes = 0;
@@ -66,11 +72,16 @@ export function calculerProgression(apprenant) {
     totalTermines = totalTermines + apprenant.resultats[i].exercicesTermines;
     totalProposes = totalProposes + apprenant.resultats[i].totalExercices;
   }
+
+  if (totalProposes === 0) {
+    return "0.00";
+  }
+
   let progression = (totalTermines / totalProposes) * 100;
   return progression.toFixed(2);
 }
 
-// this one counts how many challenges are done
+//4. this one counts how many challenges are done
 export function compterChallenges(apprenant) {
   let challengesTermines = 0;
   for (let i = 0; i < apprenant.resultats.length; i++) {
@@ -81,20 +92,55 @@ export function compterChallenges(apprenant) {
   return challengesTermines;
 }
 
-// this one displays the full apprenant fiche: nomComplet, ville, progression....
+//4. finds which days (1 to 7) have no recorded result yet
+export function trouverJoursManquants(apprenant) {
+  let joursManquants = [];
+  for (let i = 1; i <= 7; i++) {
+    let trouve = false;
+    for (let j = 0; j < apprenant.resultats.length; j++) {
+      if (apprenant.resultats[j].jour === i) {
+        trouve = true;
+      }
+    }
+    if (trouve === false) {
+      joursManquants.push(i);
+    }
+  }
+  return joursManquants;
+}
+
+//4. this one displays the full apprenant fiche: nomComplet, ville, progression....
 export function construireFicheApprenant(apprenant, progression) {
-  if (apprenant == undefined) {
-    return "Erreur : aucun apprenant trouvé avec cet identifiant.";
-  } else console.log("------------ Fiche apprenant ------------");
+  console.log("------------ Fiche apprenant ------------");
   console.log(`Identifiant          : ${apprenant.id}`);
   console.log(`Nom Complet          : ${apprenant.nomComplet}`);
   console.log(`Ville                : ${apprenant.ville}`);
   console.log(`Progression          : ${progression}`);
   console.log(`Journées renseignées : ${apprenant.resultats.length} `);
   console.log(`Challenges terminés  : ${compterChallenges(apprenant)}`);
+  console.log(`Jours manquants      : ${trouverJoursManquants(apprenant)}`);
   console.log("-----------------------------------------");
 }
 
+//---------
+
+//5.first i will start with : trouverApprenantParId(apprenants, id)
+
+//5. adds a new day result using .push(), or replaces it if that day already exists
+export function enregistrerResultat(apprenant, resultat) {
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+    if (apprenant.resultats[i].jour === resultat.jour) {
+      apprenant.resultats[i] = resultat;
+      return "Résultat mis à jour.";
+    }
+  }
+  apprenant.resultats.push(resultat);
+  return "Résultat enregistré.";
+}
+
+//-------------------
+
+//6. this function finds the apprenant using the name and then returns the apprenant
 export function trouverApprenantParNom(apprenants, nom) {
   for (let i = 0; i < apprenants.length; i++) {
     if (apprenants[i].nomComplet.includes(nom)) return apprenants[i];
@@ -103,7 +149,12 @@ export function trouverApprenantParNom(apprenants, nom) {
   return undefined;
 }
 
-// takes the progression and returns the level of the apprenant
+// after that we will use calculerProgression(apprenant)
+// so we can use construireFicheApprenant(apprenant, progression)
+
+//...................
+
+//7. takes the progression and returns the level of the apprenant
 export function determinerNiveau(progression) {
   if (progression >= 80) {
     return "Solide";
@@ -114,7 +165,7 @@ export function determinerNiveau(progression) {
   }
 }
 
-//this one takes the level wanted and returns an array of the apprenant with that level
+//7.this one takes the level wanted and returns an array of the apprenant with that level
 export function filtrerParNiveau(apprenants, niveau) {
   let resultats = [];
   for (let i = 0; i < apprenants.length; i++) {
@@ -127,26 +178,26 @@ export function filtrerParNiveau(apprenants, niveau) {
   return resultats;
 }
 
-// sorts les apprenants from highest progression to lowest
+//7. after that we will use afficherListeApprenants(apprenantsFiltres);
+// to display the choosen apprenants
+
+//----------------
+
+//8. sorts les apprenants from highest progression to lowest
 export function trierParProgression(apprenants) {
   apprenants.sort((a, b) => calculerProgression(b) - calculerProgression(a));
   return apprenants;
 }
 
-// sorts les apprenants par l'ordre alphabetique
+//8. after that we will use afficherListeApprenants(apprenantsFiltres);
+// to display the choosen apprenants
+
+//----------------
+
+//9. sorts les apprenants par l'ordre alphabetique
 export function trierParAlpha(apprenants) {
   apprenants.sort((a, b) => a.nomComplet.localeCompare(b.nomComplet));
   return apprenants;
 }
-
-// adds a new day result using .pusj (), or replaces it if that day already exists
-export function enregistrerResultat(apprenant, resultat) {
-  for (let i = 0; i < apprenant.resultats.length; i++) {
-    if (apprenant.resultats[i].jour === resultat.jour) {
-      apprenant.resultats[i] = resultat;
-      return "Résultat mis à jour.";
-    }
-  }
-  apprenant.resultats.push(resultat);
-  return "Résultat enregistré.";
-}
+//9. after that we will use afficherListeApprenants(apprenantsFiltres);
+// to display the choosen apprenants

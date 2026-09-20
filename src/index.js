@@ -82,7 +82,7 @@ while (estVrai) {
       break;
     case 6:
       let nom = prompt("Nom de l'apprenant complet : ");
-      nom = normaliserLeNom(nom);
+
       let theApprenant = trouverApprenantParNom(apprenants, nom);
       if (theApprenant === undefined) {
         console.log("Aucun apprenant trouvé.");

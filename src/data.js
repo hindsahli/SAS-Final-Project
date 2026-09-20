@@ -12,7 +12,7 @@ export const apprenants = [
       },
       {
         jour: 2,
-        exercicesTermines: 14,
+        exercicesTermines: 16,
         totalExercices: 20,
         challengeTermine: false,
       },
