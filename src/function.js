@@ -142,9 +142,9 @@ export function enregistrerResultat(apprenant, resultat) {
 
 //6. this function finds the apprenant using the name and then returns the apprenant
 export function trouverApprenantParNom(apprenants, nom) {
+  nom = normaliserLeNom(nom);
   for (let i = 0; i < apprenants.length; i++) {
     if (apprenants[i].nomComplet.includes(nom)) return apprenants[i];
-    break;
   }
   return undefined;
 }
